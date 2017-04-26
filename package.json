@@ -13,7 +13,10 @@
     "test": "npm run unit && npm run e2e"
   },
   "dependencies": {
+    "gmaps": "^0.4.24",
+    "lodash": "^4.17.4",
     "vue": "^2.2.6",
+    "vue-resource": "^1.3.1",
     "vue-router": "^2.3.1"
   },
   "devDependencies": {
