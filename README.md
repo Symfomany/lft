@@ -2,6 +2,15 @@
 
 > A Vue.js project
 
+
+## Setup JSON
+
+```
+json-server --watch json/formations.json
+```
+
+http://localhost:3000/formations
+
 ## Build Setup
 
 ``` bash

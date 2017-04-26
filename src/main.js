@@ -9,10 +9,12 @@ import VueResource from 'vue-resource'
 Vue.config.productionTip = false
 
 
+
 /**
  * Configuration of Vue Ressource
  */
 Vue.use(VueResource);
+
 
 /* eslint-disable no-new */
 new Vue({

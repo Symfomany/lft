@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="map"></div>
-    <a @click="add">Cliquez-ici </a>
   </div>
 </template>
 
@@ -12,15 +11,19 @@
     name: 'map',
 
     created() {
-
+      
+      this.$http.get('https://jumplyn.com/api/v2/lft/formations?token=lft&flatten').then(function(reponse){
+        this.markers = reponse.body;
+        this.loadMarkers();
+      });
     },
     mounted() {
       // Styles a map in night mode.
-      var map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 45.750000, lng: 4.850000 },
-        zoom: 13,
-        disableDefaultUI: true,
-        styles: [
+      this.map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 45.750000, lng: 4.850000 }, // get center of the map
+        zoom: 13, // zoom map
+        disableDefaultUI: true, //disabled controls
+        styles: [ // all map styles : https://snazzymaps.com/
           {
             "featureType": "all",
             "elementType": "labels",
@@ -223,38 +226,45 @@
       });
 
 
-      var myLatLng = { lat: 45.750000, lng: 4.850000 };
-
-      var marker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        title: 'Hello World!'
-      });
     },
     data() {
       return {
-        zoom: 9,
-        center: { lat: 45.750000, lng: 4.850000 },
-        markers: [{
-          position: { lat: 45.750000, lng: 4.850000 },
-          infoText: 'Marker 1'
-        }, {
-          position: { lat: 11.0, lng: 11.0 },
-          infoText: 'Marker 2'
-        }],
-
-
+        map: null,
+        markers: []
       }
     },
     methods: {
-      add() {
-        var center = { lat: 45.740000, lng: 4.840000 };
-
-        var marker = new google.maps.Marker({
-          position: center,
-          map: map,
-          title: 'Hello Man!'
+      loadMarkers() {
+          for(let marker of this.markers){
+            this.addMarker(marker);
+            break;
+          }
+      },
+      addMarker(marker) {
+        // console.log(marker);
+        let  address = marker.informations.adresse;
+        let geocoder = new google.maps.Geocoder();
+        console.log(marker)
+        let mapObject = this.map;
+        geocoder.geocode({ 'address': address}, function(results, status) {
+           if (status === 'OK') {
+             console.log()
+            mapObject.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: mapObject,
+              position: results[0].geometry.location
+            });
+          } else {
+            console.error('Geocode was not successful for the following reason: ' + status);
+          }
         });
+
+        // var myLatLng = { lat: 45.750000, lng: 4.850000 };
+        // var marker = new google.maps.Marker({
+        //   position: myLatLng,
+        //   map: map,
+        //   title: 'Hello World!'
+        // });
       }
     }
   }
