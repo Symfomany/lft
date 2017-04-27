@@ -11,7 +11,6 @@
     name: 'map',
 
     created() {
-      
       this.$http.get('https://jumplyn.com/api/v2/lft/formations?token=lft&flatten').then(function(reponse){
         this.markers = reponse.body;
         this.loadMarkers();
@@ -242,7 +241,7 @@
       },
       addMarker(marker) {
         // console.log(marker);
-        let  address = marker.informations.adresse;
+        let  address = marker.informations.adresse.postale;
         let geocoder = new google.maps.Geocoder();
         console.log(marker)
         let mapObject = this.map;
